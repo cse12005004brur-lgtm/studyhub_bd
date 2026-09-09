@@ -2,11 +2,13 @@
 {% load static %}
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-section">
+<section class="hero-section py-5">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-4 text-center mb-4 mb-md-0">
-                <img src="{% static 'images/director.jpg' %}" alt="Md. Arif Hossain" class="director-img">
+        <div class="row align-items-center g-4">
+            <div class="col-md-4 text-center text-md-start">
+                <div class="logo-circle mx-auto mx-md-0 shadow-sm">
+                    <img src="{% static 'images/director.jpg' %}" alt="Director Logo">
+                </div>
             </div>
             <div class="col-md-8">
                 <h4 class="text-primary fw-bold">পরিচালক</h4>
@@ -48,7 +50,7 @@
         <div class="row g-4">
             {% for cls in "6,7,8,9,10,11,12"|make_list %}{% if cls != "," %}
             <div class="col-md-3 col-sm-6">
-                <div class="card h-100 text-center p-4">
+                <div class="card h-100 text-center p-4 border-0 shadow-sm">
                     <div class="card-body">
                         <div class="mb-3 text-primary fs-1"><i class="fas fa-book-reader"></i></div>
                         <h4 class="card-title fw-bold">Class {{ cls }}</h4>
@@ -69,17 +71,19 @@
         <div class="row g-4">
             {% for note in notes %}
             <div class="col-md-4">
-                <div class="card h-100 p-3">
+                <div class="card h-100 p-3 border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="badge bg-primary">{{ note.student_class }}</span>
+                            <span class="badge bg-primary">Class {{ note.student_class }}</span>
                             <span class="text-muted small"><i class="far fa-calendar-alt"></i> {{ note.upload_date|date:"d M, Y" }}</span>
                         </div>
                         <h5 class="card-title fw-bold">{{ note.title }}</h5>
                         <h6 class="text-muted mb-3">বিষয়: {{ note.subject }}</h6>
                         <p class="card-text text-muted small">{{ note.description|truncatechars:90 }}</p>
                         <div class="d-flex justify-content-between align-items-center mt-4">
-                            <a href="{{ note.pdf_file.url }}" class="btn btn-success btn-sm" download><i class="fas fa-download"></i> Download</a>
+                            {% if note.pdf_file %}
+                                <a href="{{ note.pdf_file.url }}" class="btn btn-success btn-sm" download><i class="fas fa-download"></i> Download</a>
+                            {% endif %}
                             {% if user.is_authenticated %}
                                 <a href="{% url 'toggle_favorite' note.id %}" class="text-danger fs-5">
                                     <i class="{% if request.user in note.favorites.all %}fas{% else %}far{% endif %} fa-heart"></i>
@@ -90,7 +94,7 @@
                 </div>
             </div>
             {% empty %}
-            <div class="text-center text-muted">কোনো নোট পাওয়া যায়নি।</div>
+            <div class="text-center text-muted py-4">কোনো নোট পাওয়া যায়নি।</div>
             {% endfor %}
         </div>
     </div>
@@ -101,9 +105,7 @@
     <div class="container">
         <div class="p-4 bg-light rounded shadow-sm d-inline-block w-100" style="max-width: 600px;">
             <h4 class="fw-bold mb-3 text-success"><i class="fab fa-whatsapp me-2"></i> সরাসরি যোগাযোগ করুন</h4>
-            <p class="text-muted mb-4">যেকোনো নোট বা পড়াশোনা সংক্রান্ত প্রয়োজনে সরাসরি WhatsApp-এ আমাদের সাথে চ্যাট করুন।</p>
-
-            <!-- আপনার হোয়াটসঅ্যাপ নম্বরটি এখানে যুক্ত করা হয়েছে (8801700000000 এর জায়গায় আপনার আসল নম্বর বসিয়ে নেবেন) -->
+            <p class="text-muted mb-4">যেকোনো নোট বা পড়াশোনা সংক্রান্ত প্রয়োজনে সরাসরি WhatsApp-এ আমাদের সাথে চ্যাট করুন।</p>
             <a href="https://wa.me/+8801310954958?text=আসসালামু%20আলাইকুম,%20StudyHub%20BD%20সম্পর্কে%20জানতে%20চাচ্ছিলাম।"
                target="_blank"
                class="btn btn-success btn-lg fw-bold px-4 py-2 w-100">
@@ -112,4 +114,23 @@
         </div>
     </div>
 </section>
+
+<!-- CSS Styling for Circular Logo -->
+<style>
+    .logo-circle {
+        width: 140px;
+        height: 140px;
+        overflow: hidden;
+        border-radius: 50%;
+        border: 4px solid #0d6efd;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        background-color: #f8f9fa;
+    }
+    .logo-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+</style>
 {% endblock %}
