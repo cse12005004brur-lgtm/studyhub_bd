@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card p-4 shadow-sm">
+                <h3 class="text-center fw-bold mb-4">Register Account</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100 py-2">Register</button>
+                </form>
+                <p class="text-center mt-3 text-muted">ইতিমধ্যেই একাউন্ট আছে? <a href="{% url 'login' %}">Login করুন</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

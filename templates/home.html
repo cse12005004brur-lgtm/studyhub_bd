@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 text-center mb-4 mb-md-0">
+                <img src="{% static 'images/director.jpg' %}" alt="Md. Arif Hossain" class="director-img">
+            </div>
+            <div class="col-md-8">
+                <h4 class="text-primary fw-bold">পরিচালক</h4>
+                <h2 class="fw-bold mb-3">Md. Arif Hossain</h2>
+                <p class="lead text-muted fst-italic">
+                    “শিক্ষা মানুষের জীবনের সবচেয়ে শক্তিশালী পরিবর্তনের মাধ্যম। StudyHub BD-এর মাধ্যমে শিক্ষার্থীদের কাছে প্রয়োজনীয় নোট, শিক্ষাসামগ্রী ও জ্ঞানভিত্তিক রিসোর্স সহজে পৌঁছে দেওয়াই আমাদের লক্ষ্য। আমরা বিশ্বাস করি, সঠিক শিক্ষাসামগ্রী একজন শিক্ষার্থীর শেখার পথকে আরও সহজ, সুন্দর ও কার্যকর করে তুলতে পারে।”
+                </p>
+                <div class="alert alert-primary bg-white border-0 shadow-sm p-3 my-3">
+                    <strong>Highlighted Quote:</strong> “জ্ঞান অর্জনের পথ হোক সহজ, সুন্দর ও সবার জন্য উন্মুক্ত।”
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'notes_list' %}" class="btn btn-primary btn-lg px-4 me-2">নোট দেখুন</a>
+                    <a href="{% url 'notes_list' %}" class="btn btn-outline-secondary btn-lg px-4">Study Materials</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h3 class="fw-bold mb-4">আপনার প্রয়োজনীয় নোট খুঁজুন</h3>
+                <form action="{% url 'notes_list' %}" method="get" class="input-group input-group-lg shadow-sm">
+                    <input type="text" name="q" class="form-control" placeholder="নোটের নাম, বিষয় বা ক্লাস দিয়ে খুঁজুন...">
+                    <button class="btn btn-primary px-4" type="submit"><i class="fas fa-search"></i> Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Class Selection Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">আপনার ক্লাস নির্বাচন করুন</h2>
+        <div class="row g-4">
+            {% for cls in "6,7,8,9,10,11,12"|make_list %}{% if cls != "," %}
+            <div class="col-md-3 col-sm-6">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="mb-3 text-primary fs-1"><i class="fas fa-book-reader"></i></div>
+                        <h4 class="card-title fw-bold">Class {{ cls }}</h4>
+                        <p class="card-text text-muted small">সকল বিষয়ের আকর্ষণীয় এবং সহজবোধ্য নোট ও গাইড।</p>
+                        <a href="{% url 'class_notes' cls %}" class="btn btn-outline-primary btn-sm mt-3">নোট দেখুন</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}{% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Latest Notes Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">সর্বশেষ নোটসমূহ</h2>
+        <div class="row g-4">
+            {% for note in notes %}
+            <div class="col-md-4">
+                <div class="card h-100 p-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-primary">{{ note.student_class }}</span>
+                            <span class="text-muted small"><i class="far fa-calendar-alt"></i> {{ note.upload_date|date:"d M, Y" }}</span>
+                        </div>
+                        <h5 class="card-title fw-bold">{{ note.title }}</h5>
+                        <h6 class="text-muted mb-3">বিষয়: {{ note.subject }}</h6>
+                        <p class="card-text text-muted small">{{ note.description|truncatechars:90 }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <a href="{{ note.pdf_file.url }}" class="btn btn-success btn-sm" download><i class="fas fa-download"></i> Download</a>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'toggle_favorite' note.id %}" class="text-danger fs-5">
+                                    <i class="{% if request.user in note.favorites.all %}fas{% else %}far{% endif %} fa-heart"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center text-muted">কোনো নোট পাওয়া যায়নি।</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- WhatsApp Contact Section -->
+<section class="py-5 text-center">
+    <div class="container">
+        <div class="p-4 bg-light rounded shadow-sm d-inline-block w-100" style="max-width: 600px;">
+            <h4 class="fw-bold mb-3 text-success"><i class="fab fa-whatsapp me-2"></i> সরাসরি যোগাযোগ করুন</h4>
+            <p class="text-muted mb-4">যেকোনো নোট বা পড়াশোনা সংক্রান্ত প্রয়োজনে সরাসরি WhatsApp-এ আমাদের সাথে চ্যাট করুন।</p>
+
+            <!-- আপনার হোয়াটসঅ্যাপ নম্বরটি এখানে যুক্ত করা হয়েছে (8801700000000 এর জায়গায় আপনার আসল নম্বর বসিয়ে নেবেন) -->
+            <a href="https://wa.me/01310954958?text=আসসালামু%20আলাইকুম,%20StudyHub%20BD%20সম্পর্কে%20জানতে%20চাচ্ছিলাম।"
+               target="_blank"
+               class="btn btn-success btn-lg fw-bold px-4 py-2 w-100">
+                <i class="fab fa-whatsapp fs-4 me-2"></i> WhatsApp-এ চ্যাট করুন
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

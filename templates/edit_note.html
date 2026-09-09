@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm">
+                <h3 class="fw-bold mb-4 text-center">নোট এডিট করুন</h3>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success w-100 py-2">আপডেট করুন</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

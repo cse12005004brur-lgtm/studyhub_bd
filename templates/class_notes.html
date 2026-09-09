@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4 text-center">Class {{ class_name }} - সকল নোট</h2>
+    <div class="row g-4">
+        {% for note in notes %}
+        <div class="col-md-4">
+            <div class="card h-100 p-3">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ note.title }}</h5>
+                    <h6 class="text-muted mb-3">বিষয়: {{ note.subject }}</h6>
+                    <p class="card-text text-muted small">{{ note.description }}</p>
+                    <a href="{{ note.pdf_file.url }}" class="btn btn-success btn-sm mt-3" download><i class="fas fa-download"></i> Download PDF</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted py-5">
+            <h4>এই ক্লাসের জন্য এখনো কোনো নোট আপলোড করা হয়নি।</h4>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

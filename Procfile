@@ -1,0 +1,1 @@
+web: gunicorn studyhub_bd.wsgi:application
