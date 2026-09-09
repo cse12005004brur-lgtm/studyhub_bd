@@ -97,3 +97,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / 'studyhub_bd' / 'static',
 ]
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
